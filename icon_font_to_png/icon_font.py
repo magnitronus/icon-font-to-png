@@ -170,6 +170,8 @@ class IconFont(object):
         # If necessary, scale the image to the target size
         if org_size != size:
             out_image = out_image.resize((org_size, org_size), Image.ANTIALIAS)
+            
+        return out_image
 
     def export_icon_to_file(self, icon, size, color='black',
                             scale='auto', bgcolor=None, bgshape='square',
