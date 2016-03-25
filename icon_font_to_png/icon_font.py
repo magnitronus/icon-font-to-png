@@ -160,7 +160,7 @@ class IconFont(object):
 
         # Create output image
         out_image = Image.new("RGBA", (size, size), (0, 0, 0, 0))
-        out_draw = ImageDraw(out_image)
+        out_draw = ImageDraw.Draw(out_image)
         if bgcolor:
             if bgshape == 'square':
                 out_draw.rectangle((0, size), fill=bgcolor, outline=bgcolor)
