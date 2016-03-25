@@ -105,12 +105,6 @@ class IconFont(object):
         else:
             scale_factor = float(scale)
 
-        if bgcolor:
-            if bgshape == 'square':
-                draw.rectangle((0, size), fill=bgcolor, outline=bgcolor)
-            elif bgshape == 'circle':
-                draw.ellipse((0, 0, size, size), fill=bgcolor, outline=bgcolor)
-
         font = ImageFont.truetype(self.ttf_file, int(size * scale_factor))
         width, height = draw.textsize(self.css_icons[icon], font=font)
 
@@ -150,11 +144,6 @@ class IconFont(object):
         draw_mask = ImageDraw.Draw(image_mask)
 
         # Draw the icon on the mask
-        if bgcolor:
-            if bgshape == 'square':
-                draw_mask.rectangle((0, size), fill=bgcolor, outline=bgcolor)
-            elif bgshape == 'circle':
-                draw_mask.ellipse((0, 0, size, size), fill=bgcolor, outline=bgcolor)
                 
         draw_mask.text((float(size - width) / 2, float(size - height) / 2),
                        self.css_icons[icon], font=font, fill=255)
@@ -171,6 +160,12 @@ class IconFont(object):
 
         # Create output image
         out_image = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+        out_draw = ImageDraw(out_image)
+        if bgcolor:
+            if bgshape == 'square':
+                out_draw.rectangle((0, size), fill=bgcolor, outline=bgcolor)
+            elif bgshape == 'circle':
+                out_draw.ellipse((0, 0, size, size), fill=bgcolor, outline=bgcolor)
         out_image.paste(icon_image, (border_w, border_h))
 
         # If necessary, scale the image to the target size
