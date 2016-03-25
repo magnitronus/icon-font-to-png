@@ -196,7 +196,7 @@ class IconFont(object):
         out_image = self.export(icon, size, color, scale, bgcolor, bgshape)
 
         image_buffer = cStringIO.StringIO()
-        out_image.save(image_buffer)
+        out_image.save(image_buffer, format="PNG")
 
         return base64.b64encode(image_buffer.getvalue())
 
