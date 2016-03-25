@@ -3,7 +3,10 @@ from six import unichr
 
 import os
 import re
+import base64
 import tinycss
+import cStringIO
+
 from collections import OrderedDict
 
 from PIL import Image, ImageFont, ImageDraw
@@ -74,8 +77,8 @@ class IconFont(object):
 
         return sorted_icons, common_prefix
 
-    def export_icon(self, icon, size, color='black', scale='auto',
-                    filename=None, export_dir='exported'):
+    def export(self, icon, size, color='black',
+               scale='auto', bgcolor=None, bgshape='square'):
         """
         Exports given icon with provided parameters.
 
@@ -84,12 +87,12 @@ class IconFont(object):
         it's much less likely that the edges of the icon end up cropped.
 
         :param icon: valid icon name
-        :param filename: name of the output file
         :param size: icon size in pixels
         :param color: HTML color code or name
         :param scale: scaling factor between 0 and 1,
                       or 'auto' for automatic scaling
-        :param export_dir: path to export directory
+        :param bgcolor: backgroung color
+        :param bgshape: background shape, 'square' or 'circle'
         """
         org_size = size
         size = max(150, size)
@@ -101,6 +104,12 @@ class IconFont(object):
             scale_factor = 1
         else:
             scale_factor = float(scale)
+
+        if bgcolor:
+            if bgshape == 'square':
+                draw.rectangle((0, size), fill=bgcolor, outline=bgcolor)
+            elif bgshape == 'circle':
+                draw.ellipse((0, 0, size, size), fill=bgcolor, outline=bgcolor)
 
         font = ImageFont.truetype(self.ttf_file, int(size * scale_factor))
         width, height = draw.textsize(self.css_icons[icon], font=font)
@@ -121,7 +130,7 @@ class IconFont(object):
                 dim = max(width, height)
                 if dim > size:
                     font = ImageFont.truetype(self.ttf_file,
-                                              int(size * size/dim * factor))
+                                              int(size * size / dim * factor))
                 else:
                     break
 
@@ -162,6 +171,10 @@ class IconFont(object):
         if org_size != size:
             out_image = out_image.resize((org_size, org_size), Image.ANTIALIAS)
 
+    def export_icon_to_file(self, icon, size, color='black',
+                            scale='auto', bgcolor=None, bgshape='square',
+                            filename=None, export_dir='exported'):
+
         # Make sure export directory exists
         if not os.path.exists(export_dir):
             os.makedirs(export_dir)
@@ -170,5 +183,19 @@ class IconFont(object):
         if not filename:
             filename = icon + '.png'
 
+        out_image = self.export(icon, size, color, scale, bgcolor, bgshape)
+
         # Save file
         out_image.save(os.path.join(export_dir, filename))
+
+    def export_icon_to_base64(self, icon, size, color='black',
+                              scale='auto', bgcolor=None, bgshape='square'):
+
+        out_image = self.export(icon, size, color, scale, bgcolor, bgshape)
+
+        image_buffer = cStringIO.StringIO()
+        out_image.save(image_buffer)
+
+        return base64.b64encode(image_buffer.getvalue())
+
+
