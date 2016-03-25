@@ -53,7 +53,7 @@ setup(
     tests_require=['tox'],
     cmdclass={'test': Tox},
     install_requires=[
-        'pillow>=3.0.0',
+        'pillow>=2.8.1',
         'tinycss>=0.3',
         'six>=1.10.0',
         'requests>=2.9.1'
