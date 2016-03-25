@@ -55,7 +55,7 @@ setup(
     install_requires=[
         'pillow>=2.8.1',
         'tinycss>=0.3',
-        'six>=1.10.0',
+        'six>=1.9.0',
         'requests>=2.9.1'
     ],
     extras_require={
