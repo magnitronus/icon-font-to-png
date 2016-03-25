@@ -152,9 +152,9 @@ class IconFont(object):
         # Draw the icon on the mask
         if bgcolor:
             if bgshape == 'square':
-                draw_mask.rectangle((0, size), fill=255, outline=255)
+                draw_mask.rectangle((0, size), fill=bgcolor, outline=bgcolor)
             elif bgshape == 'circle':
-                draw_mask.ellipse((0, 0, size, size), fill=255, outline=255)
+                draw_mask.ellipse((0, 0, size, size), fill=bgcolor, outline=bgcolor)
                 
         draw_mask.text((float(size - width) / 2, float(size - height) / 2),
                        self.css_icons[icon], font=font, fill=255)
