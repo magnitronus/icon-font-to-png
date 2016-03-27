@@ -95,6 +95,7 @@ class IconFont(object):
         :param bgshape: background shape, 'square' or 'circle'
         """
         org_size = size
+        bgimage = None
         size = max(150, size)
 
         image = Image.new("RGBA", (size, size), color=(0, 0, 0, 0))
@@ -134,10 +135,12 @@ class IconFont(object):
                     factor *= 0.99
         
         if bgcolor:
+            bgimage = Image.new("RGBA", (size, size), color=(0, 0, 0, 0))
+            bgdraw = ImageDraw.Draw(image)
             if bgshape == 'square':
-                draw.rectangle((0, size), fill=bgcolor, outline=bgcolor)
+                bgdraw.rectangle((0, size), fill=bgcolor, outline=bgcolor)
             elif bgshape == 'circle':
-                draw.ellipse((0, 0, size, size), fill=bgcolor, outline=bgcolor)
+                bgdraw.ellipse((0, 0, size, size), fill=bgcolor, outline=bgcolor)
         
         draw.text((float(size - width) / 2, float(size - height) / 2),
                   self.css_icons[icon], font=font, fill=color)
@@ -150,13 +153,7 @@ class IconFont(object):
         draw_mask = ImageDraw.Draw(image_mask)
 
         # Draw the icon on the mask
-        if bgcolor:
-            if bgshape == 'square':
-                draw_mask.rectangle((0, size), fill=255, outline=255)
-            elif bgshape == 'circle':
-                draw_mask.ellipse((0, 0, size, size), fill=255, outline=255)
-        else:
-            draw_mask.text((float(size - width) / 2, float(size - height) / 2),
+        draw_mask.text((float(size - width) / 2, float(size - height) / 2),
                        self.css_icons[icon], font=font, fill=255)
 
         # Create a solid color image and apply the mask
@@ -173,8 +170,11 @@ class IconFont(object):
         out_image = Image.new("RGBA", (size, size), (0, 0, 0, 0))
         out_draw = ImageDraw.Draw(out_image)
         
-        out_image.paste(image, (border_w, border_h))
-
+        out_image.paste(icon_image, (border_w, border_h))
+        
+        if bgimage:
+            out_image = Image.alpha_composite(base, out_image)
+        
         # If necessary, scale the image to the target size
         if org_size != size:
             out_image = out_image.resize((org_size, org_size), Image.ANTIALIAS)
