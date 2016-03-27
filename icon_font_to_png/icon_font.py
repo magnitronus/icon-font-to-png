@@ -135,13 +135,12 @@ class IconFont(object):
                     factor *= 0.99
         
         if bgcolor:
-            bgimage = Image.new("RGBA", (size, size), color=(0, 0, 0, 0))
+            bgimage = Image.new("RGBA", (size, size), color=(0, 0, 0, 1))
             bgdraw = ImageDraw.Draw(image)
             if bgshape == 'square':
                 bgdraw.rectangle((0, size), fill=bgcolor, outline=bgcolor)
             elif bgshape == 'circle':
                 bgdraw.ellipse((0, 0, size, size), fill=bgcolor, outline=bgcolor)
-            bgimage.save(os.path.join("exported", "bgimage.png"))
         
         draw.text((float(size - width) / 2, float(size - height) / 2),
                   self.css_icons[icon], font=font, fill=color)
