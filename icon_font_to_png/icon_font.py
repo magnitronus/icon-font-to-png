@@ -173,7 +173,7 @@ class IconFont(object):
         out_image.paste(icon_image, (border_w, border_h))
         
         if bgimage:
-            out_image = Image.alpha_composite(base, out_image)
+            out_image = Image.alpha_composite(bgimage, out_image)
         
         # If necessary, scale the image to the target size
         if org_size != size:
