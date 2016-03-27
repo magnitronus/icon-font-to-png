@@ -173,7 +173,7 @@ class IconFont(object):
         out_image = Image.new("RGBA", (size, size), (0, 0, 0, 0))
         out_draw = ImageDraw.Draw(out_image)
         
-        out_image.paste(icon_image, (border_w, border_h))
+        out_image.paste(image, (border_w, border_h))
 
         # If necessary, scale the image to the target size
         if org_size != size:
