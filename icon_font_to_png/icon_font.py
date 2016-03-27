@@ -132,7 +132,13 @@ class IconFont(object):
                 iteration += 1
                 if iteration % 2 == 0:
                     factor *= 0.99
-
+        
+        if bgcolor:
+            if bgshape == 'square':
+                draw.rectangle((0, size), fill=bgcolor, outline=bgcolor)
+            elif bgshape == 'circle':
+                draw.ellipse((0, 0, size, size), fill=bgcolor, outline=bgcolor)
+        
         draw.text((float(size - width) / 2, float(size - height) / 2),
                   self.css_icons[icon], font=font, fill=color)
 
@@ -144,8 +150,13 @@ class IconFont(object):
         draw_mask = ImageDraw.Draw(image_mask)
 
         # Draw the icon on the mask
-                
-        draw_mask.text((float(size - width) / 2, float(size - height) / 2),
+        if bgcolor:
+            if bgshape == 'square':
+                draw_mask.rectangle((0, size), fill=255, outline=255)
+            elif bgshape == 'circle':
+                draw_mask.ellipse((0, 0, size, size), fill=255, outline=255)
+        else:
+            draw_mask.text((float(size - width) / 2, float(size - height) / 2),
                        self.css_icons[icon], font=font, fill=255)
 
         # Create a solid color image and apply the mask
@@ -161,11 +172,7 @@ class IconFont(object):
         # Create output image
         out_image = Image.new("RGBA", (size, size), (0, 0, 0, 0))
         out_draw = ImageDraw.Draw(out_image)
-        if bgcolor:
-            if bgshape == 'square':
-                out_draw.rectangle((0, size), fill=bgcolor, outline=bgcolor)
-            elif bgshape == 'circle':
-                out_draw.ellipse((0, 0, size, size), fill=bgcolor, outline=bgcolor)
+        
         out_image.paste(icon_image, (border_w, border_h))
 
         # If necessary, scale the image to the target size
