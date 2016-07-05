@@ -138,7 +138,7 @@ class IconFont(object):
             bgimage = Image.new("RGBA", (size, size), color=(0, 0, 0, 1))
             bgdraw = ImageDraw.Draw(bgimage)
             if bgshape == 'square':
-                bgdraw.rectangle((0, size), fill=bgcolor, outline=bgcolor)
+                bgdraw.rectangle((1, 1, size-1, size-1), fill=bgcolor, outline=bgcolor)
             elif bgshape == 'circle':
                 bgdraw.ellipse((1, 1, size-1, size-1), fill=bgcolor, outline=bgcolor)
         
