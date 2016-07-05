@@ -134,15 +134,17 @@ class IconFont(object):
                 iteration += 1
                 if iteration % 2 == 0:
                     factor *= 0.99
-        
+
         if bgcolor:
             bgimage = Image.new("RGBA", (size, size), color=(0, 0, 0, 1))
             bgdraw = ImageDraw.Draw(bgimage)
             if bgshape == 'square':
-                bgdraw.rectangle((1, 1, size-1, size-1), fill=bgcolor, outline=bgcolor)
+                bgdraw.rectangle((1, 1, size - 1, size - 1),
+                                 fill=bgcolor, outline=bgcolor)
             elif bgshape == 'circle':
-                bgdraw.ellipse((1, 1, size-1, size-1), fill=bgcolor, outline=bgcolor)
-        
+                bgdraw.ellipse((1, 1, size - 1, size - 1),
+                               fill=bgcolor, outline=bgcolor)
+
         draw.text((float(size - width) / 2, float(size - height) / 2),
                   self.css_icons[icon], font=font, fill=color)
 
@@ -170,16 +172,16 @@ class IconFont(object):
         # Create output image
         out_image = Image.new("RGBA", (size, size), (0, 0, 0, 0))
         out_draw = ImageDraw.Draw(out_image)
-        
+
         out_image.paste(icon_image, (border_w, border_h))
-        
+
         if bgimage:
             out_image = Image.alpha_composite(bgimage, out_image)
-        
+
         # If necessary, scale the image to the target size
         if org_size != size:
             out_image = out_image.resize((org_size, org_size), Image.ANTIALIAS)
-            
+
         return out_image
 
     def export_icon_to_file(self, icon, size, color='black',
